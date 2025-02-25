@@ -19,7 +19,31 @@ function startGame () {
     currentPlayer = CROSS;
     renderGrid(3);
 }
+function checkWin () {
+    for (let i = 0; i < 2; i++) {
+        if (field[i][0] && field[i].every(val => val === field[i][0])) {
+            alert(field[i][0]);
+            return;
+        }
+    }
+    for (let j = 0; j < 2; j++) {
+        if (field[0][j] && field.every(row => row[j] === field[0][j])) {
+            alert(field[0][j]);
+            return;
+        }
+    }
 
+    if (field[0][0] && field.every((row, i) => row[i] === field[0][0])) {
+        alert(field[0][0]);
+        return;
+    }
+
+    if (field[0][2] && field.every((row, i) => row[2 - i] === field[0][2])) {
+        alert(field[0][2]);
+        return;
+    }
+
+}
 function renderGrid (dimension) {
     container.innerHTML = '';
 
