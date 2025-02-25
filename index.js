@@ -94,7 +94,7 @@ function cellClickHandler (row, col) {
     field[row][col] = currentPlayer;
     renderSymbolInCell(currentPlayer, row, col);
 
-    if (field.flat.every(c => c !== EMPTY)) {
+    if (field.flat().every(c => c !== EMPTY)) {
         alert("Победила дружба");
         return;
     }
@@ -125,6 +125,13 @@ function addResetListener () {
 
 function resetClickHandler () {
     console.log('reset!');
+    field = [
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+    ];
+    currentPlayer = CROSS;
+    renderGrid(3);
 }
 
 
