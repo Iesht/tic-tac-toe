@@ -3,27 +3,36 @@ const ZERO = 'O';
 const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
+const sizeInput = document.getElementById('sizeInput');
+const startButton = document.getElementById('startButton');
 
 let field;
 let currentPlayer;
 let gameOver = false;
+let size = 3;
 
 startGame();
 addResetListener();
 
+startButton.addEventListener('click', () => {
+  const newSize = parseInt(sizeInput.value, 10);
+  if (newSize >= 3 && newSize <= 10) {
+    size = newSize;
+    startGame();
+  } else {
+    alert('Размер поля от 3 до 10!!!!!!!!!!!!!!!!')
+  }
+});
+
 function startGame() {
-  field = [
-    [EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY],
-    [EMPTY, EMPTY, EMPTY],
-  ];
+  field = Array.from({ length: size }, () => Array(size).fill(EMPTY));
   currentPlayer = CROSS;
   gameOver = false;
-  renderGrid(3);
+  renderGrid(size);
 }
 
 function checkWin() {
-  const size = field.length;
+  // const size = field.length;
   const lines = [];
 
   for (let i = 0; i < size; i++) {
@@ -167,6 +176,8 @@ function computerMove() {
   renderSymbolInCell(ZERO, row, col);
   checkGameState();
 }
+
+document.getElementById('resetButton').addEventListener('click', startGame);
 
 // testDraw();
 // testWin();
