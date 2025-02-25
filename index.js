@@ -5,6 +5,7 @@ const EMPTY = ' ';
 const container = document.getElementById('fieldWrapper');
 
 let field;
+let currentPlayer;
 
 startGame();
 addResetListener();
@@ -15,6 +16,7 @@ function startGame () {
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY],
     ];
+    currentPlayer = CROSS;
     renderGrid(3);
 }
 
@@ -35,8 +37,11 @@ function renderGrid (dimension) {
 
 function cellClickHandler (row, col) {
     // Пиши код тут
+    if (field[row][col] !== EMPTY) return;  // Если поле, по которому кликнули, не пустое, символ ставиться не должен.
     console.log(`Clicked on cell: ${row}, ${col}`);
 
+    field[row][col] = currentPlayer;
+    renderSymbolInCell(currentPlayer, row, col);
 
     /* Пользоваться методом для размещения символа в клетке так:
         renderSymbolInCell(ZERO, row, col);
