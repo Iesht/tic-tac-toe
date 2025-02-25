@@ -20,29 +20,56 @@ function startGame () {
     renderGrid(3);
 }
 function checkWin () {
-    for (let i = 0; i < 2; i++) {
-        if (field[i][0] && field[i].every(val => val === field[i][0])) {
-            alert(field[i][0]);
-            return;
-        }
-    }
-    for (let j = 0; j < 2; j++) {
-        if (field[0][j] && field.every(row => row[j] === field[0][j])) {
-            alert(field[0][j]);
-            return;
+    const size = field.length;
+
+    for (let i = 0; i < size; i++) {
+        if (field[i][0] !== EMPTY && field[i].every(val => val === field[i][0])) {
+            highlightWinningCells(i, 0, i, size - 1);
+            alert(`Победил ${field[i][0]}!`);
+            return true;
         }
     }
 
-    if (field[0][0] && field.every((row, i) => row[i] === field[0][0])) {
-        alert(field[0][0]);
-        return;
+    for (let j = 0; j < size; j++) {
+        if (field[0][j] !== EMPTY && field.every(row => row[j] === field[0][j])) {
+            highlightWinningCells(0, j, size - 1, j);
+            alert(`Победил ${field[0][j]}!`);
+            return true;
+        }
     }
 
-    if (field[0][2] && field.every((row, i) => row[2 - i] === field[0][2])) {
-        alert(field[0][2]);
-        return;
+    if (field[0][0] !== EMPTY && field.every((row, i) => row[i] === field[0][0])) {
+        highlightWinningCells(0, 0, size - 1, size - 1);
+        alert(`Победил ${field[0][0]}!`);
+        return true;
+    }
+    
+    if (field[0][size - 1] !== EMPTY && field.every((row, i) => row[size - 1 - i] === field[0][size - 1])) {
+        highlightWinningCells(0, size - 1, size - 1, 0);
+        alert(`Победил ${field[0][size - 1]}!`);
+        return true;
     }
 
+    return false;
+}
+function highlightWinningCells (startRow, startCol, endRow, endCol) {
+    if (startRow === endRow) {
+        for (let i = startCol; i <= endCol; i++) {
+            renderSymbolInCell(field[startRow][i], startRow, i, 'red');
+        }
+    } else if (startCol === endCol) {
+        for (let i = startRow; i <= endRow; i++) {
+            renderSymbolInCell(field[i][startCol], i, startCol, 'red');
+        }
+    } else if (startRow === startCol && endRow === endCol) {
+        for (let i = 0; i <= endRow; i++) {
+            renderSymbolInCell(field[i][i], i, i, 'red');
+        }
+    } else {
+        for (let i = 0; i <= endRow; i++) {
+            renderSymbolInCell(field[i][endCol - i], i, endCol - i, 'red');
+        }
+    }
 }
 function renderGrid (dimension) {
     container.innerHTML = '';
