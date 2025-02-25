@@ -6,6 +6,7 @@ const container = document.getElementById('fieldWrapper');
 
 let field;
 let currentPlayer;
+let gameOver = false;
 
 startGame();
 addResetListener();
@@ -17,6 +18,7 @@ function startGame () {
         [EMPTY, EMPTY, EMPTY],
     ];
     currentPlayer = CROSS;
+    gameOver = false;
     renderGrid(3);
 }
 function checkWin () {
@@ -29,7 +31,7 @@ function checkWin () {
     for (let j = 0; j < 2; j++) {
         if (field[0][j] && field.every(row => row[j] === field[0][j])) {
             alert(field[0][j]);
-            return;
+            return true;
         }
     }
 
@@ -42,7 +44,6 @@ function checkWin () {
         alert(field[0][2]);
         return;
     }
-
 }
 function renderGrid (dimension) {
     container.innerHTML = '';
@@ -61,11 +62,16 @@ function renderGrid (dimension) {
 
 function cellClickHandler (row, col) {
     // Пиши код тут
-    if (field[row][col] !== EMPTY) return;  // Если поле, по которому кликнули, не пустое, символ ставиться не должен.
+    if (gameOver || field[row][col] !== EMPTY) return;  // Если поле, по которому кликнули, не пустое, символ ставиться не должен.
     console.log(`Clicked on cell: ${row}, ${col}`);
 
     field[row][col] = currentPlayer;
     renderSymbolInCell(currentPlayer, row, col);
+
+    if (checkWin()) {
+        gameOver = true;
+
+    }
 
     if (field.flat().every(c => c !== EMPTY)) {
         alert("Победила дружба");
@@ -98,13 +104,7 @@ function addResetListener () {
 
 function resetClickHandler () {
     console.log('reset!');
-    field = [
-        [EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY],
-    ];
-    currentPlayer = CROSS;
-    renderGrid(3);
+    startGame();
 }
 
 
