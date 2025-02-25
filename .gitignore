@@ -107,3 +107,5 @@ dist
 .idea/material_theme_project_new.xml
 .idea/vcs.xml
 .idea/workspace.xml
+/.idea
+.idea/workspace.xml
