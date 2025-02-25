@@ -43,7 +43,7 @@ function checkWin () {
         alert(`Победил ${field[0][0]}!`);
         return true;
     }
-    
+
     if (field[0][size - 1] !== EMPTY && field.every((row, i) => row[size - 1 - i] === field[0][size - 1])) {
         highlightWinningCells(0, size - 1, size - 1, 0);
         alert(`Победил ${field[0][size - 1]}!`);
@@ -87,12 +87,14 @@ function renderGrid (dimension) {
 }
 
 function cellClickHandler (row, col) {
-    // Пиши код тут
-    if (field[row][col] !== EMPTY) return;  // Если поле, по которому кликнули, не пустое, символ ставиться не должен.
-    console.log(`Clicked on cell: ${row}, ${col}`);
+    if (field[row][col] !== EMPTY) return;
 
     field[row][col] = currentPlayer;
     renderSymbolInCell(currentPlayer, row, col);
+
+    if (checkWin()) {
+        return;
+    }
 
     if (field.flat().every(c => c !== EMPTY)) {
         alert("Победила дружба");
@@ -101,11 +103,18 @@ function cellClickHandler (row, col) {
 
     currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
 
-    /* Пользоваться методом для размещения символа в клетке так:
-        renderSymbolInCell(ZERO, row, col);
-     */
+    if (currentPlayer === ZERO) {
+        computerMove();
+        if (checkWin()) {
+            return;
+        }
+        if (field.flat().every(c => c !== EMPTY)) {
+            alert("Победила дружба");
+            return;
+        }
+        currentPlayer = CROSS;
+    }
 }
-
 function renderSymbolInCell (symbol, row, col, color = '#333') {
     const targetCell = findCell(row, col);
 
@@ -117,12 +126,10 @@ function findCell (row, col) {
     const targetRow = container.querySelectorAll('tr')[row];
     return targetRow.querySelectorAll('td')[col];
 }
-
 function addResetListener () {
     const resetButton = document.getElementById('reset');
     resetButton.addEventListener('click', resetClickHandler);
 }
-
 function resetClickHandler () {
     console.log('reset!');
     field = [
@@ -133,10 +140,6 @@ function resetClickHandler () {
     currentPlayer = CROSS;
     renderGrid(3);
 }
-
-
-/* Test Function */
-/* Победа первого игрока */
 function testWin () {
     clickOnCell(0, 2);
     clickOnCell(0, 0);
@@ -147,7 +150,6 @@ function testWin () {
     clickOnCell(2, 1);
 }
 
-/* Ничья */
 function testDraw () {
     clickOnCell(2, 0);
     clickOnCell(1, 0);
@@ -162,5 +164,24 @@ function testDraw () {
 }
 
 function clickOnCell (row, col) {
-    findCell(row, col).click();
+    findCell(row, col).click()
+}
+
+function computerMove() {
+    const emptyCells = [];
+    for (let i = 0; i < field.length; i++) {
+        for (let j = 0; j < field[i].length; j++) {
+            if (field[i][j] === EMPTY) {
+                emptyCells.push({ row: i, col: j });
+            }
+        }
+    }
+
+    if (emptyCells.length > 0) {
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        const { row, col } = emptyCells[randomIndex];
+
+        field[row][col] = ZERO;
+        renderSymbolInCell(ZERO, row, col);
+    }
 }
