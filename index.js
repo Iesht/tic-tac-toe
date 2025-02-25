@@ -43,6 +43,13 @@ function cellClickHandler (row, col) {
     field[row][col] = currentPlayer;
     renderSymbolInCell(currentPlayer, row, col);
 
+    if (field.flat.every(c => c !== EMPTY)) {
+        alert("Победила дружба");
+        return;
+    }
+
+    currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
+
     /* Пользоваться методом для размещения символа в клетке так:
         renderSymbolInCell(ZERO, row, col);
      */
