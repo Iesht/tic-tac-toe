@@ -4,10 +4,17 @@ const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
 
+let field;
+
 startGame();
 addResetListener();
 
 function startGame () {
+    field = [
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+    ];
     renderGrid(3);
 }
 
